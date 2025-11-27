@@ -13,7 +13,7 @@ public class ActividadController {
     @Autowired
     private IActividadService actividadService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<Actividad> crearActividad(@RequestBody Actividad actividad){
         return actividadService.crearActividad(actividad);
     }
