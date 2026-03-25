@@ -2,6 +2,7 @@ package com.agroKont.kontAgro.controllers;
 
 import com.agroKont.kontAgro.entities.Usuario;
 import com.agroKont.kontAgro.service.contracts.IUsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    private IUsuarioService usuarioService;
+
+    private final IUsuarioService usuarioService;
 
     @PostMapping
     public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
