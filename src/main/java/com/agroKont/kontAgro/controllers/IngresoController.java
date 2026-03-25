@@ -2,16 +2,17 @@ package com.agroKont.kontAgro.controllers;
 
 import com.agroKont.kontAgro.entities.Ingreso;
 import com.agroKont.kontAgro.service.contracts.IIngresoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ingreso")
+@RequiredArgsConstructor
 public class IngresoController {
 
-    @Autowired
-    private IIngresoService ingresoService;
+    private final IIngresoService ingresoService;
 
     @PostMapping
     public ResponseEntity<Ingreso> crearIngreso(@RequestBody Ingreso ingreso){
