@@ -1,10 +1,11 @@
 package com.agroKont.kontAgro.service.implementation;
 
+import com.agroKont.kontAgro.dto.Class.ActividadDTO;
+import com.agroKont.kontAgro.dto.Converter.ActividadDTOConverter;
 import com.agroKont.kontAgro.entities.Actividad;
-import com.agroKont.kontAgro.entities.Egreso;
 import com.agroKont.kontAgro.repository.IActividadRepository;
 import com.agroKont.kontAgro.service.contracts.IActividadService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ActividadService implements IActividadService {
 
-    @Autowired
-    private IActividadRepository actividadRepository;
+    private final IActividadRepository actividadRepository;
+    private final ActividadDTOConverter actividadDTOConverter;
 
     @Override
-    public ResponseEntity<Actividad> crearActividad(Actividad actividad) {
-        return new ResponseEntity<>(actividadRepository.save(actividad), HttpStatus.OK);
-    }
+    public ResponseEntity<?> crearActividad(ActividadDTO actividadDTO) {
+        List<Actividad> actividades  = actividadRepository.findAll();
+        boolean existeId = false;
+        for (int i = 0; i < actividades.size() ; i++) {
+
+            if (actividadDTO.getIdActividad()==actividades.get(i).getIdActividad()){
+                existeId = true;
+                break;
+            }
+        }
+        if (existeId){
+            String mensaje = "La actividad con ID " + actividadDTO.getIdActividad() + " ya existe.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+        }else {
+
+            return new ResponseEntity<>(actividadDTOConverter.convertToDTO(actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO))), HttpStatus.OK);
+        }
+        }
 
     @Override
     public ResponseEntity<?> consultarActividad(Integer id) {
@@ -29,7 +46,7 @@ public class ActividadService implements IActividadService {
         Optional<Actividad> actividadOptional = actividadRepository.findById(id);
 
         if (actividadOptional.isPresent()) {
-            return ResponseEntity.ok(actividadOptional.get());
+            return ResponseEntity.ok(actividadDTOConverter.convertToDTO( actividadOptional.get()));
         } else {
             String mensaje = "La actividad con ID " + id + " no fue encontrada.";
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
@@ -37,22 +54,26 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    public ResponseEntity<Actividad> actualizarActividad(Actividad actividad) {
+    public ResponseEntity<ActividadDTO> actualizarActividad(ActividadDTO actividadDTO) {
 
-        ResponseEntity<?> consulta = consultarActividad(actividad.getIdActividad());
+        ResponseEntity<?> consulta = consultarActividad(actividadDTO.getIdActividad());
 
         if (consulta.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>(actividadRepository.save(actividad), HttpStatus.OK);
+            return new ResponseEntity<>(actividadDTOConverter.convertToDTO(actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO))), HttpStatus.OK);
         }
         return ResponseEntity.status(consulta.getStatusCode()).build();
     }
 
     @Override
     public ResponseEntity<?> consultarActividad() {
-        List<Actividad> actividadOptional = actividadRepository.findAll();
+        List<Actividad> actividades  = actividadRepository.findAll();
 
-        if (!actividadOptional.isEmpty()) {
-            return ResponseEntity.ok(actividadOptional);
+        if (!actividades.isEmpty()) {
+            List<ActividadDTO> actividadesDTO = actividades.stream()
+                    .map(actividadDTOConverter::convertToDTO)
+                    .toList();
+
+            return ResponseEntity.ok(actividadesDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existen registros.");

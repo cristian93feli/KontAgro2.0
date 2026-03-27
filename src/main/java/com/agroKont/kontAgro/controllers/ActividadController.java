@@ -1,5 +1,6 @@
 package com.agroKont.kontAgro.controllers;
 
+import com.agroKont.kontAgro.dto.Class.ActividadDTO;
 import com.agroKont.kontAgro.entities.Actividad;
 import com.agroKont.kontAgro.service.contracts.IActividadService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class ActividadController {
     private final IActividadService actividadService;
 
     @PostMapping("/crear")
-    public ResponseEntity<Actividad> crearActividad(@RequestBody Actividad actividad){
-        return actividadService.crearActividad(actividad);
+    public ResponseEntity<?> crearActividad(@RequestBody ActividadDTO actividadDTO){
+        return actividadService.crearActividad(actividadDTO);
     }
 
     @GetMapping
@@ -25,8 +26,8 @@ public class ActividadController {
     }
 
     @PutMapping
-    public ResponseEntity<Actividad> actualizarActividad(@RequestBody Actividad actividad){
-        return actividadService.actualizarActividad(actividad);
+    public ResponseEntity<ActividadDTO> actualizarActividad(@RequestBody ActividadDTO actividadDTO){
+        return actividadService.actualizarActividad(actividadDTO);
     }
 
     @GetMapping("/actividades")

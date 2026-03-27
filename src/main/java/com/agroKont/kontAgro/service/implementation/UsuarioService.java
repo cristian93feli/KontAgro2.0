@@ -18,6 +18,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public ResponseEntity<Usuario> crearUsuario(Usuario usuario) {
+
         return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.OK);
     }
 
