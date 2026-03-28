@@ -1,15 +1,18 @@
 package com.kontagro.service.contracts;
 
-import com.kontagro.entities.Ingreso;
+import com.kontagro.dto.Class.IngresoDTO;;
 import org.springframework.http.ResponseEntity;
+
 
 public interface IIngresoService {
 
-    ResponseEntity<Ingreso> crearIngreso(Ingreso ingreso);
+    ResponseEntity<IngresoDTO> crearIngreso(IngresoDTO ingresoDTO);
 
     ResponseEntity<?> consultarIngreso(Integer id);
 
-    ResponseEntity<Ingreso> actualizarIngreso(Ingreso ingreso);
+    ResponseEntity<IngresoDTO> actualizarIngreso(IngresoDTO ingresoDTO);
 
     ResponseEntity<?> consultarIngreso();
+
 }
+

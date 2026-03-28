@@ -1,6 +1,6 @@
 package com.kontagro.controllers;
 
-import com.kontagro.entities.Ingreso;
+import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +14,22 @@ public class IngresoController {
     private final IIngresoService ingresoService;
 
     @PostMapping
-    public ResponseEntity<Ingreso> crearIngreso(@RequestBody Ingreso ingreso){
-        return ingresoService.crearIngreso(ingreso);
+    public ResponseEntity<IngresoDTO> crearIngreso(@RequestBody IngresoDTO ingresoDTO) {
+        return ingresoService.crearIngreso(ingresoDTO);
     }
 
     @GetMapping
-    public ResponseEntity<?> consultarIngreso(@RequestParam Integer id){
+    public ResponseEntity<?> consultarIngreso(@RequestParam Integer id) {
         return ingresoService.consultarIngreso(id);
     }
 
     @GetMapping("/ingresos")
-    public ResponseEntity<?> consultarIngreso(){
+    public ResponseEntity<?> consultarIngreso() {
         return ingresoService.consultarIngreso();
     }
 
     @PutMapping
-    public ResponseEntity<Ingreso> actualizarIngreso(@RequestBody Ingreso ingreso){
-        return ingresoService.actualizarIngreso(ingreso);
+    public ResponseEntity<IngresoDTO> actualizarIngreso(@RequestBody IngresoDTO ingresoDTO) {
+        return ingresoService.actualizarIngreso(ingresoDTO);
     }
 }

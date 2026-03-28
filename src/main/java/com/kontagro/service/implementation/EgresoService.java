@@ -25,7 +25,8 @@ public class EgresoService implements IEgresoService {
 
     @Override
     public ResponseEntity<EgresoDTO> crearEgreso(EgresoDTO egresoDTO) {
-        return new ResponseEntity<>(egresoDTOConverter.convertToDTO(iEgresoRepository.save(egresoDTOConverter.convertToEntity(egresoDTO))),  HttpStatus.OK);
+        return new ResponseEntity<>(egresoDTOConverter.convertToDTO
+                (iEgresoRepository.save(egresoDTOConverter.convertToEntity(egresoDTO))),  HttpStatus.OK);
     }
 
     @Override
