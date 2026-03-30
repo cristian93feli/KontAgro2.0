@@ -6,10 +6,12 @@ import com.kontagro.entities.Ingreso;
 import com.kontagro.repository.IIngresoRepository;
 import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +42,6 @@ public class IngresoService implements IIngresoService {
 
     @Override
     public ResponseEntity<IngresoDTO> actualizarIngreso(IngresoDTO ingresoDTO) {
-
         ResponseEntity<?> consulta = consultarIngreso(1);
 
         if (consulta.getStatusCode() == HttpStatus.OK) {
@@ -60,6 +61,26 @@ public class IngresoService implements IIngresoService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existen registros.");
         }
+    }
+
+    @Override
+    public List<IngresoDTO> consultarIngresoPorFecha(LocalDate fechaInicial, LocalDate fechaFinal)
+            throws BadRequestException {
+
+        if (fechaInicial == null || fechaFinal == null) {
+            throw new BadRequestException("Las fechas no pueden ser nulas");
+        }
+
+        if (fechaInicial.isAfter(fechaFinal)) {
+            throw new RuntimeException("La fecha inicial no puede ser mayor a la final");
+        }
+        List<Ingreso> ingresos = iIngresoRepository.findByFechaBetween(fechaInicial, fechaFinal);
+
+        List<IngresoDTO> respuesta = ingresos.stream()
+                .map(ingresoDTOConverter::convertToDTO)
+                .toList();
+
+        return respuesta;
     }
 }
 

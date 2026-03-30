@@ -1,9 +1,11 @@
 package com.kontagro.service.implementation;
 
+import com.kontagro.dto.Class.UsuarioDTO;
+import com.kontagro.dto.Converter.UsuarioDTOConverter;
 import com.kontagro.entities.Usuario;
 import com.kontagro.repository.IUsuarioRepository;
 import com.kontagro.service.contracts.IUsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,21 +13,23 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService implements IUsuarioService {
 
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private final IUsuarioRepository iUsuarioRepository;
+    private final UsuarioDTOConverter usuarioDTOConverter;
+
 
     @Override
-    public ResponseEntity<Usuario> crearUsuario(Usuario usuario) {
-
-        return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.OK);
+    public ResponseEntity<UsuarioDTO> crearUsuario(UsuarioDTO usuarioDTO) {
+        return new ResponseEntity<>(usuarioDTOConverter.convertToDTO
+                (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO))), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> consultarUsuario(Long id) {
 
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        Optional<Usuario> usuarioOptional = iUsuarioRepository.findById(id);
 
         if (usuarioOptional.isPresent()) {
             return ResponseEntity.ok(usuarioOptional.get());
@@ -36,18 +40,20 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public ResponseEntity<Usuario> actualizarUsuario(Usuario usuario) {
+    public ResponseEntity<UsuarioDTO> actualizarUsuario(UsuarioDTO usuarioDTO) {
 
-        ResponseEntity<?> consulta = consultarUsuario(usuario.getId());
+        ResponseEntity<?> consulta = consultarUsuario(usuarioDTO.getId());
 
         if (consulta.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>(usuarioRepository.save(usuario), HttpStatus.OK);
+            return new ResponseEntity<>(usuarioDTOConverter.convertToDTO
+                    (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO))), HttpStatus.OK);
         }
 
         return ResponseEntity.status(consulta.getStatusCode()).build();
     }
 
-    public Usuario login(String usuario, String contrasena) {
-        return usuarioRepository.findByUsuarioAndContrasena(usuario, contrasena);
+    public UsuarioDTO login(String usuario, String contrasena) {
+        return (usuarioDTOConverter.convertToDTO
+                (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena)));
     }
 }

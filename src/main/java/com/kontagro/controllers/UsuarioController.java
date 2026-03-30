@@ -1,7 +1,6 @@
 package com.kontagro.controllers;
 
 import com.kontagro.dto.Class.UsuarioDTO;
-import com.kontagro.entities.Usuario;
 import com.kontagro.service.contracts.IUsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioDTO usuarioDTO) {
 
-        Usuario usuarioEncontrado = usuarioService.login(usuarioDTO.(), usuarioDTO.getContrasena());
+        UsuarioDTO usuarioEncontrado = usuarioService.login(usuarioDTO.getUsuario(), usuarioDTO.getContrasena());
 
         if (usuarioEncontrado != null) {
             return ResponseEntity.ok(usuarioEncontrado);
