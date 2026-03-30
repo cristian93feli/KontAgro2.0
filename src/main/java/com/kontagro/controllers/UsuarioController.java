@@ -1,5 +1,6 @@
 package com.kontagro.controllers;
 
+import com.kontagro.dto.Class.UsuarioDTO;
 import com.kontagro.entities.Usuario;
 import com.kontagro.service.contracts.IUsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ public class UsuarioController {
     private final IUsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.crearUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        return usuarioService.crearUsuario(usuarioDTO);
     }
 
     @GetMapping
@@ -26,14 +27,14 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.actualizarUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        return usuarioService.actualizarUsuario(usuarioDTO);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> login(@RequestBody UsuarioDTO usuarioDTO) {
 
-        Usuario usuarioEncontrado = usuarioService.login(usuario.getUsuario(), usuario.getContrasena());
+        Usuario usuarioEncontrado = usuarioService.login(usuarioDTO.(), usuarioDTO.getContrasena());
 
         if (usuarioEncontrado != null) {
             return ResponseEntity.ok(usuarioEncontrado);

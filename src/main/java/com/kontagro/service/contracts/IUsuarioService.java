@@ -1,15 +1,15 @@
 package com.kontagro.service.contracts;
 
-import com.kontagro.entities.Usuario;
+import com.kontagro.dto.Class.UsuarioDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface IUsuarioService {
 
-    ResponseEntity<Usuario> crearUsuario(Usuario usuario);
+    ResponseEntity<UsuarioDTO> crearUsuario(UsuarioDTO usuarioDTO);
 
     ResponseEntity<?> consultarUsuario(Long id);
 
-    ResponseEntity<Usuario> actualizarUsuario(Usuario usuario);
+    ResponseEntity<UsuarioDTO> actualizarUsuario(UsuarioDTO usuarioDTO);
 
-    public Usuario login(String usuario, String contraseña);
+    public UsuarioDTO login(String usuario, String contraseña);
 }
