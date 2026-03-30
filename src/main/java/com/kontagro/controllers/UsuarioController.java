@@ -42,4 +42,8 @@ public class UsuarioController {
                     .body("Usuario o contraseña incorrectos");
         }
     }
+    @DeleteMapping
+    public ResponseEntity<String> eliminarUsuario(@RequestParam Long id ){
+        return usuarioService.eliminarUsuario(id);
+    }
 }

@@ -11,5 +11,7 @@ public interface IUsuarioService {
 
     ResponseEntity<UsuarioDTO> actualizarUsuario(UsuarioDTO usuarioDTO);
 
-    public UsuarioDTO login(String usuario, String contraseña);
+    UsuarioDTO login(String usuario, String contraseña);
+
+    ResponseEntity<String> eliminarUsuario(Long id);
 }

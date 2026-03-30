@@ -56,4 +56,17 @@ public class UsuarioService implements IUsuarioService {
         return (usuarioDTOConverter.convertToDTO
                 (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena)));
     }
+
+    @Override
+    public ResponseEntity<String> eliminarUsuario(Long id) {
+
+        if (iUsuarioRepository.existsById(id)) {
+            iUsuarioRepository.deleteById(id);
+            return ResponseEntity.ok("El usuario fue eliminado correctamente");
+        }
+        else {
+            String mensaje = "El usuario con ID '"  + id + "' no existe.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+        }
+    }
 }
