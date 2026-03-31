@@ -3,8 +3,11 @@ package com.kontagro.service.implementation;
 import com.kontagro.dto.Class.ActividadDTO;
 import com.kontagro.dto.Converter.ActividadDTOConverter;
 import com.kontagro.entities.Actividad;
+import com.kontagro.exceptions.BadRequestException;
+import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IActividadRepository;
 import com.kontagro.service.contracts.IActividadService;
+import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,52 +24,44 @@ public class ActividadService implements IActividadService {
     private final ActividadDTOConverter actividadDTOConverter;
 
     @Override
-    public ResponseEntity<?> crearActividad(ActividadDTO actividadDTO) {
-        List<Actividad> actividades = actividadRepository.findAll();
-        boolean existeId = false;
-        for (int i = 0; i < actividades.size(); i++) {
-
-            if (actividadDTO.getIdActividad() == actividades.get(i).getIdActividad()) {
-                existeId = true;
-                break;
-            }
+    public ActividadDTO crearActividad(ActividadDTO actividadDTO) {
+        if (actividadRepository.existsById(actividadDTO.getIdActividad())) {
+            throw new BadRequestException("La actividad con ID " + actividadDTO.getIdActividad() + " ya existe.");
         }
-        if (existeId) {
-            String mensaje = "La actividad con ID " + actividadDTO.getIdActividad() + " ya existe.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
-        } else {
 
-            return new ResponseEntity<>(actividadDTOConverter.convertToDTO(actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO))), HttpStatus.OK);
-        }
+
+        Actividad entidad = actividadDTOConverter.convertToEntity(actividadDTO);
+        Actividad guardada = actividadRepository.save(entidad);
+
+        return actividadDTOConverter.convertToDTO(guardada);
     }
 
     @Override
-    public ResponseEntity<?> consultarActividad(Integer id) {
+    public ActividadDTO consultarActividad(Integer id) {
 
         Optional<Actividad> actividadOptional = actividadRepository.findById(id);
 
         if (actividadOptional.isPresent()) {
-            return ResponseEntity.ok(actividadDTOConverter.convertToDTO(actividadOptional.get()));
+            return actividadDTOConverter.convertToDTO(actividadOptional.get());
         } else {
-            String mensaje = "La actividad con ID " + id + " no fue encontrada.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+            throw new ResourceNotFoundException(String.format(MensajesError.ACTIVIDAD_NO_ENCONTRADA, id));
         }
     }
 
     @Override
-    public ResponseEntity<ActividadDTO> actualizarActividad(ActividadDTO actividadDTO) {
+    public ActividadDTO actualizarActividad(ActividadDTO actividadDTO) {
 
-        ResponseEntity<?> consulta = consultarActividad(actividadDTO.getIdActividad());
+        ActividadDTO consulta = consultarActividad(actividadDTO.getIdActividad());
 
-        if (consulta.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>(actividadDTOConverter.convertToDTO
-                    (actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO))), HttpStatus.OK);
+        if (consulta == null) {
+            throw new ResourceNotFoundException("no existe la actividad ingresada");
         }
-        return ResponseEntity.status(consulta.getStatusCode()).build();
+        return actividadDTOConverter.convertToDTO
+                (actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO)));
     }
 
     @Override
-    public ResponseEntity<?> consultarActividad() {
+    public List<ActividadDTO> consultarActividad() {
         List<Actividad> actividades = actividadRepository.findAll();
 
         if (!actividades.isEmpty()) {
@@ -74,10 +69,9 @@ public class ActividadService implements IActividadService {
                     .map(actividadDTOConverter::convertToDTO)
                     .toList();
 
-            return ResponseEntity.ok(actividadesDTO);
+            return actividadesDTO;
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No existen registros.");
+             throw new BadRequestException("No existen Registros");
         }
     }
 }

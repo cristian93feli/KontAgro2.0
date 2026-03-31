@@ -1,15 +1,18 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.Class.ActividadDTO;
+import com.kontagro.entities.Actividad;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface IActividadService {
 
-    ResponseEntity<?> crearActividad(ActividadDTO actividad);
+    ActividadDTO crearActividad(ActividadDTO actividad);
 
-    ResponseEntity<?> consultarActividad(Integer id);
+    ActividadDTO consultarActividad(Integer id);
 
-    ResponseEntity<ActividadDTO> actualizarActividad(ActividadDTO actividad);
+    ActividadDTO actualizarActividad(ActividadDTO actividad);
 
-    ResponseEntity<?> consultarActividad();
+    List<ActividadDTO> consultarActividad();
 }

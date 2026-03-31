@@ -3,8 +3,10 @@ package com.kontagro.service.implementation;
 import com.kontagro.dto.Class.EgresoDTO;
 import com.kontagro.dto.Converter.EgresoDTOConverter;
 import com.kontagro.entities.Egreso;
+import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IEgresoRepository;
 import com.kontagro.service.contracts.IEgresoService;
+import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -39,7 +41,7 @@ public class EgresoService implements IEgresoService {
             Egreso egreso = resultado.get();
             return egresoDTOConverter.convertToDTO(egreso);
         } else {
-            throw new RuntimeException("El egreso con ID " + id + " no fue encontrado.");
+            throw new ResourceNotFoundException(String.format(MensajesError.ACTIVIDAD_NO_ENCONTRADA, id));
         }
 
     }
