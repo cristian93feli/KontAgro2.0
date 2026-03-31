@@ -46,5 +46,10 @@ public class IngresoController {
 
         return ResponseEntity.ok(respuesta);
     }
+
+    @DeleteMapping
+    public ResponseEntity <String>  eliminarIngreso(@RequestParam Integer id){
+        return ingresoService.eliminarIngreso(id);
+    }
 }
 

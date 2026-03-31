@@ -27,5 +27,4 @@ public class Ingreso {
     @Column(name = "valor")
     private BigDecimal valor;
 
-
 }

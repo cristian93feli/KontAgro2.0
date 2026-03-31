@@ -21,5 +21,6 @@ public interface IIngresoService {
     List<IngresoDTO> consultarIngresoPorFecha(LocalDate fechaInicial,LocalDate fechaFinal)
             throws BadRequestException;
 
+    ResponseEntity<String> eliminarIngreso(Integer id);
 }
 

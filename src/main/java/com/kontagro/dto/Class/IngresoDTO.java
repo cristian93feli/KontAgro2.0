@@ -1,13 +1,16 @@
 package com.kontagro.dto.Class;
 
-import com.kontagro.entities.Actividad;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class IngresoDTO implements Serializable {
-
+    private Integer id;
     private LocalDate fecha;
-    private Actividad actividad;
+    private BigDecimal valor;
+    private Integer idActividad;
 
 }

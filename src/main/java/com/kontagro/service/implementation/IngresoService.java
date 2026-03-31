@@ -24,8 +24,10 @@ public class IngresoService implements IIngresoService {
 
     @Override
     public ResponseEntity<IngresoDTO> crearIngreso(IngresoDTO ingresoDTO) {
-        return new ResponseEntity<>(ingresoDTOConverter.convertToDTO
-                (iIngresoRepository.save(ingresoDTOConverter.convertToEntity(ingresoDTO))), HttpStatus.OK);
+        Ingreso ingre = ingresoDTOConverter.convertToEntity(ingresoDTO);
+        ingre = iIngresoRepository.save(ingre);
+        ingresoDTO = ingresoDTOConverter.convertToDTO(ingre);
+        return new ResponseEntity<>(ingresoDTO, HttpStatus.OK);
     }
 
     @Override
@@ -81,6 +83,17 @@ public class IngresoService implements IIngresoService {
                 .toList();
 
         return respuesta;
+    }
+
+    @Override
+    public ResponseEntity<String> eliminarIngreso(Integer id) {
+        if (iIngresoRepository.existsById(id)) {
+            iIngresoRepository.deleteById(id);
+            return ResponseEntity.ok("Registro de ingreso eliminado exitosamente");
+        } else {
+            String mensaje = "El registro de ingreso con ID '" + id + "' no existe.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+        }
     }
 }
 
