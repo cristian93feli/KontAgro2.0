@@ -30,27 +30,34 @@ public class EgresoService implements IEgresoService {
     }
 
     @Override
-    public ResponseEntity<?> consultarEgreso(Integer id) {
-        Optional<Egreso> egresoOptional = iEgresoRepository.findById(id);
+    public EgresoDTO consultarEgreso(Integer id) {
 
-        if (egresoOptional.isPresent()) {
-            return ResponseEntity.ok(egresoOptional.get());
+
+        Optional<Egreso> resultado = iEgresoRepository.findById(id);
+
+        if (resultado.isPresent()) {
+            Egreso egreso = resultado.get();
+            return egresoDTOConverter.convertToDTO(egreso);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("El egreso con ID " + id + " no fue encontrado.");
+            throw new RuntimeException("El egreso con ID " + id + " no fue encontrado.");
         }
+
     }
+
+
+
+
 
     @Override
     public ResponseEntity<EgresoDTO> actualizarEgreso(EgresoDTO egresoDTO) {
 
-        ResponseEntity<?> consulta = consultarEgreso(1);
+        EgresoDTO consulta = consultarEgreso(1);
 
-        if (consulta.getStatusCode() == HttpStatus.OK) {
+        if (consulta!=null) {
             return new ResponseEntity<>(egresoDTOConverter.convertToDTO
                     (iEgresoRepository.save(egresoDTOConverter.convertToEntity(egresoDTO))), HttpStatus.OK);
         }
-        return ResponseEntity.status(consulta.getStatusCode()).build();
+        return new ResponseEntity<>(consulta  , HttpStatus.OK);
     }
 
     @Override

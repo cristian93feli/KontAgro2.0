@@ -4,6 +4,7 @@ import com.kontagro.dto.Class.EgresoDTO;
 import com.kontagro.service.contracts.IEgresoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class EgresoController {
 
     @GetMapping
     public ResponseEntity<?> consultarEgreso(@RequestParam Integer id) {
-        return egresoService.consultarEgreso(id);
+        return ResponseEntity.ok(egresoService.consultarEgreso(id));
     }
 
     @PutMapping
