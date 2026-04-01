@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class IngresoDTOConverter {
@@ -19,5 +21,11 @@ public class IngresoDTOConverter {
 
     public Ingreso convertToEntity(IngresoDTO ingresoDTO) {
         return modelMapper.map(ingresoDTO, Ingreso.class);
+    }
+
+    public List<IngresoDTO> convertToDTOList(List<Ingreso> ingresos) {
+        return ingresos.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 }

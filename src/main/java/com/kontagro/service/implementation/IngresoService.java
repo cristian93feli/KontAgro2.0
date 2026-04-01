@@ -3,8 +3,10 @@ package com.kontagro.service.implementation;
 import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.dto.Converter.IngresoDTOConverter;
 import com.kontagro.entities.Ingreso;
+import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IIngresoRepository;
 import com.kontagro.service.contracts.IIngresoService;
+import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -23,46 +25,37 @@ public class IngresoService implements IIngresoService {
     private final IngresoDTOConverter ingresoDTOConverter;
 
     @Override
-    public ResponseEntity<IngresoDTO> crearIngreso(IngresoDTO ingresoDTO) {
-        Ingreso ingre = ingresoDTOConverter.convertToEntity(ingresoDTO);
-        ingre = iIngresoRepository.save(ingre);
-        ingresoDTO = ingresoDTOConverter.convertToDTO(ingre);
-        return new ResponseEntity<>(ingresoDTO, HttpStatus.OK);
+    public IngresoDTO crearIngreso(IngresoDTO ingresoDTO) {
+        return ingresoDTOConverter.convertToDTO(iIngresoRepository.save(ingresoDTOConverter.convertToEntity(ingresoDTO)));
     }
 
     @Override
-    public ResponseEntity<?> consultarIngreso(Integer id) {
+    public IngresoDTO consultarIngreso(Integer id) {
         Optional<Ingreso> ingresoOptional = iIngresoRepository.findById(id);
 
         if (ingresoOptional.isPresent()) {
-            return ResponseEntity.ok(ingresoOptional.get());
+            return ingresoDTOConverter.convertToDTO(ingresoOptional.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("El ingreso con ID " + id + " no fue encontrado.");
+            throw new ResourceNotFoundException(String.format(MensajesError.INGRESO_NO_ENCONTRADO, id));
         }
     }
 
     @Override
-    public ResponseEntity<IngresoDTO> actualizarIngreso(IngresoDTO ingresoDTO) {
-        ResponseEntity<?> consulta = consultarIngreso(1);
+    public IngresoDTO actualizarIngreso(IngresoDTO ingresoDTO) {
+        consultarIngreso(ingresoDTO.getId());
 
-        if (consulta.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>(ingresoDTOConverter.convertToDTO
-                    (iIngresoRepository.save(ingresoDTOConverter.convertToEntity(ingresoDTO))), HttpStatus.OK);
-        }
-        return ResponseEntity.status(consulta.getStatusCode()).build();
+
+            return ingresoDTOConverter.convertToDTO
+                    (iIngresoRepository.save(ingresoDTOConverter.convertToEntity(ingresoDTO)));
+
     }
 
     @Override
-    public ResponseEntity<?> consultarIngreso() {
-        List<Ingreso> ingresoOptional = iIngresoRepository.findAll();
+    public List<IngresoDTO> consultarIngreso() {
+        List<IngresoDTO> ingresoLista = ingresoDTOConverter.convertToDTOList(iIngresoRepository.findAll());
 
-        if (!ingresoOptional.isEmpty()) {
-            return ResponseEntity.ok(ingresoOptional);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No existen registros.");
-        }
+            return ingresoLista;
+
     }
 
     @Override
@@ -70,30 +63,26 @@ public class IngresoService implements IIngresoService {
             throws BadRequestException {
 
         if (fechaInicial == null || fechaFinal == null) {
-            throw new BadRequestException("Las fechas no pueden ser nulas");
+            throw new BadRequestException(MensajesError.FECHA_INVALIDA);
         }
 
         if (fechaInicial.isAfter(fechaFinal)) {
-            throw new RuntimeException("La fecha inicial no puede ser mayor a la final");
+            throw new RuntimeException(MensajesError.FECHA_INVALIDA2);
         }
-        List<Ingreso> ingresos = iIngresoRepository.findByFechaBetween(fechaInicial, fechaFinal);
+        List<IngresoDTO> ingresos = ingresoDTOConverter.convertToDTOList(iIngresoRepository.findByFechaBetween(fechaInicial, fechaFinal));
 
-        List<IngresoDTO> respuesta = ingresos.stream()
-                .map(ingresoDTOConverter::convertToDTO)
-                .toList();
-
-        return respuesta;
+        return ingresos;
     }
 
     @Override
-    public ResponseEntity<String> eliminarIngreso(Integer id) {
-        if (iIngresoRepository.existsById(id)) {
-            iIngresoRepository.deleteById(id);
-            return ResponseEntity.ok("Registro de ingreso eliminado exitosamente");
-        } else {
-            String mensaje = "El registro de ingreso con ID '" + id + "' no existe.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+    public void eliminarIngreso(Integer id) {
+        if (!iIngresoRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    String.format(MensajesError.INGRESO_NO_ENCONTRADO, id));
+
         }
+            iIngresoRepository.deleteById(id);
+
     }
 }
 

@@ -17,33 +17,30 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        return usuarioService.crearUsuario(usuarioDTO);
+        return new ResponseEntity<>(usuarioService.crearUsuario(usuarioDTO), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> consultarUsuario(@RequestParam Long id) {
-        return usuarioService.consultarUsuario(id);
+    public ResponseEntity<UsuarioDTO> consultarUsuario(@RequestParam Long id) {
+        return new ResponseEntity<>(usuarioService.consultarUsuario(id), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<UsuarioDTO> actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        return usuarioService.actualizarUsuario(usuarioDTO);
+        return new ResponseEntity<>(usuarioService.actualizarUsuario(usuarioDTO), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> login(@RequestBody UsuarioDTO usuarioDTO) {
 
-        UsuarioDTO usuarioEncontrado = usuarioService.login(usuarioDTO.getUsuario(), usuarioDTO.getContrasena());
+        return new ResponseEntity<>(usuarioService.login(usuarioDTO.getUsuario() , usuarioDTO.getContrasena()), HttpStatus.OK);
 
-        if (usuarioEncontrado != null) {
-            return ResponseEntity.ok(usuarioEncontrado);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Usuario o contraseña incorrectos");
-        }
+
     }
     @DeleteMapping
-    public ResponseEntity<String> eliminarUsuario(@RequestParam Long id ){
-        return usuarioService.eliminarUsuario(id);
+    public ResponseEntity<Void> eliminarUsuario(@RequestParam Long id ){
+         usuarioService.eliminarUsuario(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

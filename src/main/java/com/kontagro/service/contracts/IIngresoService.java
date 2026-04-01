@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface IIngresoService {
 
-    ResponseEntity<IngresoDTO> crearIngreso(IngresoDTO ingresoDTO);
+    IngresoDTO crearIngreso(IngresoDTO ingresoDTO);
 
-    ResponseEntity<?> consultarIngreso(Integer id);
+    IngresoDTO consultarIngreso(Integer id);
 
-    ResponseEntity<IngresoDTO> actualizarIngreso(IngresoDTO ingresoDTO);
+    IngresoDTO actualizarIngreso(IngresoDTO ingresoDTO);
 
-    ResponseEntity<?> consultarIngreso();
+    List<IngresoDTO> consultarIngreso();
 
     List<IngresoDTO> consultarIngresoPorFecha(LocalDate fechaInicial,LocalDate fechaFinal)
             throws BadRequestException;
 
-    ResponseEntity<String> eliminarIngreso(Integer id);
+    void eliminarIngreso(Integer id);
 }
 

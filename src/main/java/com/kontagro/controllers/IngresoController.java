@@ -4,6 +4,7 @@ import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +20,26 @@ public class IngresoController {
 
     @PostMapping
     public ResponseEntity<IngresoDTO> crearIngreso(@RequestBody IngresoDTO ingresoDTO) {
-        return ingresoService.crearIngreso(ingresoDTO);
+        return new ResponseEntity<>(ingresoService.crearIngreso(ingresoDTO), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> consultarIngreso(@RequestParam Integer id) {
-        return ingresoService.consultarIngreso(id);
+    public ResponseEntity<IngresoDTO> consultarIngreso(@RequestParam Integer id) {
+        return new ResponseEntity<>(ingresoService.consultarIngreso(id), HttpStatus.OK);
     }
 
     @GetMapping("/ingresos")
-    public ResponseEntity<?> consultarIngreso() {
-        return ingresoService.consultarIngreso();
+    public ResponseEntity<List<IngresoDTO>> consultarIngreso() {
+        return new ResponseEntity<>(ingresoService.consultarIngreso(), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<IngresoDTO> actualizarIngreso(@RequestBody IngresoDTO ingresoDTO) {
-        return ingresoService.actualizarIngreso(ingresoDTO);
+        return new ResponseEntity<>(ingresoService.actualizarIngreso(ingresoDTO), HttpStatus.OK);
     }
 
     @GetMapping("/consultarFechas")
-    public ResponseEntity<?> consultarIngresosPorFechas(@RequestParam LocalDate fechaInicial,
+    public ResponseEntity<List<IngresoDTO>> consultarIngresosPorFechas(@RequestParam LocalDate fechaInicial,
                                                         @RequestParam LocalDate fechaFinal)
                                                         throws BadRequestException {
         List<IngresoDTO> respuesta =
@@ -48,8 +49,9 @@ public class IngresoController {
     }
 
     @DeleteMapping
-    public ResponseEntity <String>  eliminarIngreso(@RequestParam Integer id){
-        return ingresoService.eliminarIngreso(id);
+    public ResponseEntity <Void>  eliminarIngreso(@RequestParam Integer id){
+        ingresoService.eliminarIngreso(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

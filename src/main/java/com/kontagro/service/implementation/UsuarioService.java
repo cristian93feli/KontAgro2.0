@@ -3,8 +3,10 @@ package com.kontagro.service.implementation;
 import com.kontagro.dto.Class.UsuarioDTO;
 import com.kontagro.dto.Converter.UsuarioDTOConverter;
 import com.kontagro.entities.Usuario;
+import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IUsuarioRepository;
 import com.kontagro.service.contracts.IUsuarioService;
+import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,52 +23,48 @@ public class UsuarioService implements IUsuarioService {
 
 
     @Override
-    public ResponseEntity<UsuarioDTO> crearUsuario(UsuarioDTO usuarioDTO) {
-        return new ResponseEntity<>(usuarioDTOConverter.convertToDTO
-                (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO))), HttpStatus.OK);
+    public UsuarioDTO crearUsuario(UsuarioDTO usuarioDTO) {
+        return usuarioDTOConverter.convertToDTO
+                (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO)));
     }
 
     @Override
-    public ResponseEntity<?> consultarUsuario(Long id) {
+    public UsuarioDTO consultarUsuario(Long id) {
 
         Optional<Usuario> usuarioOptional = iUsuarioRepository.findById(id);
 
         if (usuarioOptional.isPresent()) {
-            return ResponseEntity.ok(usuarioOptional.get());
-        } else {
-            String mensaje = "El usuario con ID " + id + " no fue encontrado.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+            return usuarioDTOConverter.convertToDTO(usuarioOptional.get());
         }
+             throw new ResourceNotFoundException(
+                String.format(MensajesError.USUARIO_NO_ENCONTRADO, id));
     }
 
     @Override
-    public ResponseEntity<UsuarioDTO> actualizarUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO) {
 
-        ResponseEntity<?> consulta = consultarUsuario(usuarioDTO.getId());
-
-        if (consulta.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>(usuarioDTOConverter.convertToDTO
-                    (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO))), HttpStatus.OK);
-        }
-
-        return ResponseEntity.status(consulta.getStatusCode()).build();
+        consultarUsuario(usuarioDTO.getId());
+        return usuarioDTOConverter.convertToDTO
+                (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO)));
     }
 
     public UsuarioDTO login(String usuario, String contrasena) {
-        return (usuarioDTOConverter.convertToDTO
-                (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena)));
+        UsuarioDTO usuarioDTO =  usuarioDTOConverter.convertToDTO
+                (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena));
+
+        if(usuarioDTO == null){
+            throw new ResourceNotFoundException(MensajesError.UDUARIO_ERRADO);
+        }
+        return usuarioDTO;
     }
 
     @Override
-    public ResponseEntity<String> eliminarUsuario(Long id) {
+    public void eliminarUsuario(Long id) {
 
-        if (iUsuarioRepository.existsById(id)) {
-            iUsuarioRepository.deleteById(id);
-            return ResponseEntity.ok("El usuario fue eliminado correctamente");
+        if (!iUsuarioRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    String.format(MensajesError.UDUARIO_NO_ENCONTRADO, id));
         }
-        else {
-            String mensaje = "El usuario con ID '"  + id + "' no existe.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
-        }
+        iUsuarioRepository.deleteById(id);
     }
 }

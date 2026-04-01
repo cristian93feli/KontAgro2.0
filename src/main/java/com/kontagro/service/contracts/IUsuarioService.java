@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 
 public interface IUsuarioService {
 
-    ResponseEntity<UsuarioDTO> crearUsuario(UsuarioDTO usuarioDTO);
+    UsuarioDTO crearUsuario(UsuarioDTO usuarioDTO);
 
-    ResponseEntity<?> consultarUsuario(Long id);
+    UsuarioDTO consultarUsuario(Long id);
 
-    ResponseEntity<UsuarioDTO> actualizarUsuario(UsuarioDTO usuarioDTO);
+    UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO);
 
     UsuarioDTO login(String usuario, String contraseña);
 
-    ResponseEntity<String> eliminarUsuario(Long id);
+    void eliminarUsuario(Long id);
 }
