@@ -8,9 +8,7 @@ import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IActividadRepository;
 import com.kontagro.service.contracts.IActividadService;
 import com.kontagro.utils.MensajesError;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,9 +24,8 @@ public class ActividadService implements IActividadService {
     @Override
     public ActividadDTO crearActividad(ActividadDTO actividadDTO) {
         if (actividadRepository.existsById(actividadDTO.getIdActividad())) {
-            throw new BadRequestException("La actividad con ID " + actividadDTO.getIdActividad() + " ya existe.");
+            throw new BadRequestException(String.format(MensajesError.ACTIVIDAD_YA_EXISTE, actividadDTO.getIdActividad()));
         }
-
 
         Actividad entidad = actividadDTOConverter.convertToEntity(actividadDTO);
         Actividad guardada = actividadRepository.save(entidad);
@@ -54,7 +51,7 @@ public class ActividadService implements IActividadService {
         ActividadDTO consulta = consultarActividad(actividadDTO.getIdActividad());
 
         if (consulta == null) {
-            throw new ResourceNotFoundException("no existe la actividad ingresada");
+            throw new ResourceNotFoundException(MensajesError.ACTIVIDAD_NO_EXISTE);
         }
         return actividadDTOConverter.convertToDTO
                 (actividadRepository.save(actividadDTOConverter.convertToEntity(actividadDTO)));
@@ -71,7 +68,7 @@ public class ActividadService implements IActividadService {
 
             return actividadesDTO;
         } else {
-             throw new BadRequestException("No existen Registros");
+             throw new BadRequestException(MensajesError.NO_EXISTE_REGISTROS);
         }
     }
 }

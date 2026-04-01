@@ -9,8 +9,6 @@ import com.kontagro.service.contracts.IIngresoService;
 import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -63,11 +61,11 @@ public class IngresoService implements IIngresoService {
             throws BadRequestException {
 
         if (fechaInicial == null || fechaFinal == null) {
-            throw new BadRequestException(MensajesError.FECHA_INVALIDA);
+            throw new BadRequestException(MensajesError.FECHAS_NULAS);
         }
 
         if (fechaInicial.isAfter(fechaFinal)) {
-            throw new RuntimeException(MensajesError.FECHA_INVALIDA2);
+            throw new RuntimeException(MensajesError.FECHA_INICIAL_MAYOR);
         }
         List<IngresoDTO> ingresos = ingresoDTOConverter.convertToDTOList(iIngresoRepository.findByFechaBetween(fechaInicial, fechaFinal));
 

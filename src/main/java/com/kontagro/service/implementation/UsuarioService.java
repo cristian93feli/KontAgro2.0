@@ -8,8 +8,6 @@ import com.kontagro.repository.IUsuarioRepository;
 import com.kontagro.service.contracts.IUsuarioService;
 import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -53,7 +51,7 @@ public class UsuarioService implements IUsuarioService {
                 (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena));
 
         if(usuarioDTO == null){
-            throw new ResourceNotFoundException(MensajesError.UDUARIO_ERRADO);
+            throw new ResourceNotFoundException(MensajesError.USUARIO_ERRADO);
         }
         return usuarioDTO;
     }
@@ -63,7 +61,7 @@ public class UsuarioService implements IUsuarioService {
 
         if (!iUsuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException(
-                    String.format(MensajesError.UDUARIO_NO_ENCONTRADO, id));
+                    String.format(MensajesError.USUARIO_NO_ENCONTRADO, id));
         }
         iUsuarioRepository.deleteById(id);
     }

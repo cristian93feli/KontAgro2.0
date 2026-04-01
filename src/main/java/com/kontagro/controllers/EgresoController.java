@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/egreso")
@@ -20,28 +21,32 @@ public class EgresoController {
 
     @PostMapping
     public ResponseEntity<EgresoDTO> crearEgreso(@RequestBody EgresoDTO egresoDTO) {
-        return egresoService.crearEgreso(egresoDTO);
+        return new ResponseEntity<>(egresoService.crearEgreso(egresoDTO), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> consultarEgreso(@RequestParam Integer id) {
-        return ResponseEntity.ok(egresoService.consultarEgreso(id));
+    public ResponseEntity<EgresoDTO> consultarEgreso(@RequestParam Integer id) {
+        return new ResponseEntity<>(egresoService.consultarEgreso(id), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<EgresoDTO> actualizarEgreso(@RequestBody EgresoDTO egresoDTO) {
-        return egresoService.actualizarEgreso(egresoDTO);
+        return new ResponseEntity<>(egresoService.actualizarEgreso(egresoDTO), HttpStatus.OK);
     }
 
     @GetMapping("/egresos")
-    public ResponseEntity<?> consultarEgreso() {
-        return egresoService.consultarEgreso();
+    public ResponseEntity<List<EgresoDTO>> consultarEgreso() {
+        return new ResponseEntity<>(egresoService.consultarEgreso(), HttpStatus.OK);
+
     }
 
     @GetMapping("/consultarFechas")
-    public ResponseEntity<?> consultarEgresoPorFecha(
+    public ResponseEntity<List<EgresoDTO>> consultarEgresoPorFecha(
             @RequestParam LocalDate fecha_inicial,
             @RequestParam LocalDate fecha_final) throws BadRequestException {
-        return egresoService.consultarEgresoPorFecha(fecha_inicial, fecha_final);
+
+        List<EgresoDTO> respuesta =
+                egresoService.consultarEgresoPorFecha(fecha_inicial, fecha_final);
+        return ResponseEntity.ok(respuesta);
     }
 }

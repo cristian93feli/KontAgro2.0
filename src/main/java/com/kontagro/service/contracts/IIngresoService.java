@@ -2,7 +2,6 @@ package com.kontagro.service.contracts;
 
 import com.kontagro.dto.Class.IngresoDTO;;
 import org.apache.coyote.BadRequestException;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
