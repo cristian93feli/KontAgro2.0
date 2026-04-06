@@ -73,4 +73,13 @@ public class EgresoService implements IEgresoService {
 
         return egresos;
     }
+
+    @Override
+    public void eliminarEgreso(Integer id) {
+        if (!iEgresoRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    String.format(MensajesError.EGRESO_NO_ENCONTRADO, id));
+        }
+        iEgresoRepository.deleteById(id);
+    }
 }

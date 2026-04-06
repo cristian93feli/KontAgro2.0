@@ -1,7 +1,6 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.Class.UsuarioDTO;
-import org.springframework.http.ResponseEntity;
 
 public interface IUsuarioService {
 

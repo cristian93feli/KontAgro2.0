@@ -13,4 +13,6 @@ public interface IActividadService {
     ActividadDTO actualizarActividad(ActividadDTO actividad);
 
     List<ActividadDTO> consultarActividad();
+
+    void eliminarActividad(Integer id);
 }

@@ -8,7 +8,7 @@ import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IActividadRepository;
 import com.kontagro.service.contracts.IActividadService;
 import com.kontagro.utils.MensajesError;
-import lombok.RequiredArgsConstructor;;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,5 +70,14 @@ public class ActividadService implements IActividadService {
         } else {
              throw new BadRequestException(MensajesError.NO_EXISTE_REGISTROS);
         }
+    }
+
+    @Override
+    public void eliminarActividad(Integer id) {
+        if (!actividadRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    String.format(MensajesError.ACTIVIDAD_NO_ENCONTRADA, id));
+        }
+        actividadRepository.deleteById(id);
     }
 }

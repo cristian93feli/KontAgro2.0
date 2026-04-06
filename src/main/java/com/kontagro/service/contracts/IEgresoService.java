@@ -20,4 +20,6 @@ public interface IEgresoService {
     List<EgresoDTO> consultarEgresoPorFecha(
             @RequestParam LocalDate fecha_inicial,
             @RequestParam LocalDate fecha_final) throws BadRequestException;
+
+    void eliminarEgreso(Integer id);
 }

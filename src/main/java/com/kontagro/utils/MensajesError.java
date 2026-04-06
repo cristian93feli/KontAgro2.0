@@ -11,7 +11,7 @@ public class MensajesError {
     public static final String NO_EXISTE_REGISTROS = "No existen Registros.";
     public static final String FECHAS_NULAS = "Las fechas no pueden ser nulas.";
     public static final String FECHA_INICIAL_MAYOR  = "La fecha inicial no puede ser mayor a la final.";
-    public static final String INGRESO_NO_ENCONTRADO = "El ingreso con ID %d no fue encontradO.";
+    public static final String INGRESO_NO_ENCONTRADO = "El ingreso con ID %d no fue encontrado.";
     public static final String USUARIO_ERRADO = "Usuario o Contraseña Errado.";
     public static final String USUARIO_NO_ENCONTRADO = "El usuario con ID %d no fue encontrado.";
 }

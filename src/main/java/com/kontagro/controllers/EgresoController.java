@@ -49,4 +49,10 @@ public class EgresoController {
                 egresoService.consultarEgresoPorFecha(fecha_inicial, fecha_final);
         return ResponseEntity.ok(respuesta);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> eliminarEgreso(@RequestParam Integer id){
+        egresoService.eliminarEgreso(id);
+        return ResponseEntity.noContent().build();
+    }
 }

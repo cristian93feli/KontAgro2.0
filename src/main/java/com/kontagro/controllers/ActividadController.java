@@ -35,4 +35,10 @@ public class ActividadController {
     public ResponseEntity<List<ActividadDTO>> consultarActividad(){
         return ResponseEntity.ok(actividadService.consultarActividad());
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> eliminarActividad(@RequestParam Integer id){
+        actividadService.eliminarActividad(id);
+        return ResponseEntity.noContent().build();
+    }
 }
