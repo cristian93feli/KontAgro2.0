@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class ActividadDTOConverter {
@@ -19,5 +21,11 @@ public class ActividadDTOConverter {
 
     public Actividad convertToEntity(ActividadDTO actividadDTO) {
         return modelMapper.map(actividadDTO, Actividad.class);
+    }
+
+    public List<ActividadDTO> convertToDTOList(List<Actividad> actividades) {
+        return actividades.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 }

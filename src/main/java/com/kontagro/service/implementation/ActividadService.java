@@ -62,11 +62,9 @@ public class ActividadService implements IActividadService {
         List<Actividad> actividades = actividadRepository.findAll();
 
         if (!actividades.isEmpty()) {
-            List<ActividadDTO> actividadesDTO = actividades.stream()
-                    .map(actividadDTOConverter::convertToDTO)
-                    .toList();
+            List<ActividadDTO> actividadesLista = actividadDTOConverter.convertToDTOList(actividades) ;
 
-            return actividadesDTO;
+            return actividadesLista;
         } else {
              throw new BadRequestException(MensajesError.NO_EXISTE_REGISTROS);
         }
