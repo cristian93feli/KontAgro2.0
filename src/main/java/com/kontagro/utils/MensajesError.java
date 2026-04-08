@@ -14,4 +14,5 @@ public class MensajesError {
     public static final String INGRESO_NO_ENCONTRADO = "El ingreso con ID %d no fue encontrado.";
     public static final String USUARIO_ERRADO = "Usuario o Contraseña Errado.";
     public static final String USUARIO_NO_ENCONTRADO = "El usuario con ID %d no fue encontrado.";
+    public static final String USUARIO_NO_EXISTE = "El usuario ingresado no existe.";
 }

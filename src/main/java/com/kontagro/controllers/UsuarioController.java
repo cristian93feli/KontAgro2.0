@@ -1,5 +1,6 @@
 package com.kontagro.controllers;
 
+import com.kontagro.dto.Class.AuthResponseDTO;
 import com.kontagro.dto.Class.UsuarioDTO;
 import com.kontagro.service.contracts.IUsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> login(@RequestBody UsuarioDTO usuarioDTO) {
-
-        return new ResponseEntity<>(usuarioService.login(usuarioDTO.getUsuario() , usuarioDTO.getContrasena()), HttpStatus.OK);
-
-
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody UsuarioDTO usuarioDTO) {
+        return new ResponseEntity<>(usuarioService.login(usuarioDTO.getUsuario(), usuarioDTO.getContrasena()), HttpStatus.OK);
     }
+
     @DeleteMapping
     public ResponseEntity<Void> eliminarUsuario(@RequestParam Long id ){
          usuarioService.eliminarUsuario(id);

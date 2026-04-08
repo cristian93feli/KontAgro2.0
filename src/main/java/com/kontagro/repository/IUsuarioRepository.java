@@ -3,7 +3,8 @@ package com.kontagro.repository;
 import com.kontagro.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
+import java.util.Optional;
 
-    Usuario findByUsuarioAndContrasena(String usuario, String contraseñn);
+public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByUsuario(String usuario);
 }

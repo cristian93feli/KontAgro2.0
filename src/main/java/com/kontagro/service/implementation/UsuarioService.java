@@ -1,13 +1,16 @@
 package com.kontagro.service.implementation;
 
+import com.kontagro.dto.Class.AuthResponseDTO;
 import com.kontagro.dto.Class.UsuarioDTO;
 import com.kontagro.dto.Converter.UsuarioDTOConverter;
 import com.kontagro.entities.Usuario;
 import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IUsuarioRepository;
+import com.kontagro.security.AuthService;
 import com.kontagro.service.contracts.IUsuarioService;
 import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,13 +21,32 @@ public class UsuarioService implements IUsuarioService {
 
     private final IUsuarioRepository iUsuarioRepository;
     private final UsuarioDTOConverter usuarioDTOConverter;
-
+    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     @Override
     public UsuarioDTO crearUsuario(UsuarioDTO usuarioDTO) {
-        return usuarioDTOConverter.convertToDTO
-                (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO)));
+        Usuario usuario = usuarioDTOConverter.convertToEntity(usuarioDTO);
+
+        usuario.setContrasena(passwordEncoder.encode(usuarioDTO.getContrasena()));
+
+        return usuarioDTOConverter.convertToDTO(iUsuarioRepository.save(usuario));
     }
+
+    public AuthResponseDTO login(String usuario, String contrasena) {
+        Usuario usuarioEntity = iUsuarioRepository.findByUsuario(usuario)
+                .orElseThrow(() -> new ResourceNotFoundException(MensajesError.USUARIO_ERRADO));
+
+        if (!passwordEncoder.matches(contrasena, usuarioEntity.getContrasena())) {
+            throw new ResourceNotFoundException(MensajesError.USUARIO_ERRADO);
+        }
+
+        String token = authService.generateToken(usuarioEntity);
+        UsuarioDTO usuarioDTO = usuarioDTOConverter.convertToDTO(usuarioEntity);
+
+        return new AuthResponseDTO(token, usuarioDTO);
+    }
+
 
     @Override
     public UsuarioDTO consultarUsuario(Long id) {
@@ -34,7 +56,7 @@ public class UsuarioService implements IUsuarioService {
         if (usuarioOptional.isPresent()) {
             return usuarioDTOConverter.convertToDTO(usuarioOptional.get());
         }
-             throw new ResourceNotFoundException(
+        throw new ResourceNotFoundException(
                 String.format(MensajesError.USUARIO_NO_ENCONTRADO, id));
     }
 
@@ -46,15 +68,6 @@ public class UsuarioService implements IUsuarioService {
                 (iUsuarioRepository.save(usuarioDTOConverter.convertToEntity(usuarioDTO)));
     }
 
-    public UsuarioDTO login(String usuario, String contrasena) {
-        UsuarioDTO usuarioDTO =  usuarioDTOConverter.convertToDTO
-                (iUsuarioRepository.findByUsuarioAndContrasena(usuario, contrasena));
-
-        if(usuarioDTO == null){
-            throw new ResourceNotFoundException(MensajesError.USUARIO_ERRADO);
-        }
-        return usuarioDTO;
-    }
 
     @Override
     public void eliminarUsuario(Long id) {

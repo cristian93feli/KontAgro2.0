@@ -1,5 +1,6 @@
 package com.kontagro.service.contracts;
 
+import com.kontagro.dto.Class.AuthResponseDTO;
 import com.kontagro.dto.Class.UsuarioDTO;
 
 public interface IUsuarioService {
@@ -10,7 +11,7 @@ public interface IUsuarioService {
 
     UsuarioDTO actualizarUsuario(UsuarioDTO usuarioDTO);
 
-    UsuarioDTO login(String usuario, String contraseña);
+    AuthResponseDTO login(String usuario, String contraseña);
 
     void eliminarUsuario(Long id);
 }
