@@ -1,7 +1,9 @@
 package com.kontagro.service.implementation;
 
 import com.kontagro.dto.Class.IngresoDTO;
+import com.kontagro.dto.Class.IngresoporActividadDTO;
 import com.kontagro.dto.Converter.IngresoDTOConverter;
+import com.kontagro.dto.Converter.IngresoPorActividadConverter;
 import com.kontagro.entities.Ingreso;
 import com.kontagro.exceptions.ResourceNotFoundException;
 import com.kontagro.repository.IIngresoRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class IngresoService implements IIngresoService {
 
     private final IIngresoRepository iIngresoRepository;
     private final IngresoDTOConverter ingresoDTOConverter;
+    private final IngresoPorActividadConverter ingresoPorActividadConverter;
 
     @Override
     public IngresoDTO crearIngreso(IngresoDTO ingresoDTO) {
@@ -57,7 +61,7 @@ public class IngresoService implements IIngresoService {
     }
 
     @Override
-    public List<IngresoDTO> consultarIngresoPorFecha(LocalDate fechaInicial, LocalDate fechaFinal)
+    public List<IngresoporActividadDTO> consultarIngresoPorFecha(LocalDate fechaInicial, LocalDate fechaFinal)
             throws BadRequestException {
 
         if (fechaInicial == null || fechaFinal == null) {
@@ -67,7 +71,11 @@ public class IngresoService implements IIngresoService {
         if (fechaInicial.isAfter(fechaFinal)) {
             throw new RuntimeException(MensajesError.FECHA_INICIAL_MAYOR);
         }
-        List<IngresoDTO> ingresos = ingresoDTOConverter.convertToDTOList(iIngresoRepository.findByFechaBetween(fechaInicial, fechaFinal));
+        List<IngresoporActividadDTO> ingresos = iIngresoRepository.findFechas(fechaInicial, fechaFinal);
+
+//        List<IngresoporActividadDTO> ingresos = iIngresoRepository.findFechas(fechaInicial,fechaFinal ).stream()
+//                .map(ingresoPorActividadConverter::convertToDTO)
+//                .collect(Collectors.toList());
 
         return ingresos;
     }

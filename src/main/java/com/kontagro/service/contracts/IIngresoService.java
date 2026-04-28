@@ -1,6 +1,7 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.Class.IngresoDTO;;
+import com.kontagro.dto.Class.IngresoporActividadDTO;
 import org.apache.coyote.BadRequestException;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public interface IIngresoService {
 
     List<IngresoDTO> consultarIngreso();
 
-    List<IngresoDTO> consultarIngresoPorFecha(LocalDate fechaInicial,LocalDate fechaFinal)
+    List<IngresoporActividadDTO> consultarIngresoPorFecha(LocalDate fechaInicial, LocalDate fechaFinal)
             throws BadRequestException;
 
     void eliminarIngreso(Integer id);

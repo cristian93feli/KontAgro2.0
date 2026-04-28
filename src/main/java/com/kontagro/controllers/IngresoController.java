@@ -1,12 +1,20 @@
 package com.kontagro.controllers;
 
 import com.kontagro.dto.Class.IngresoDTO;
+import com.kontagro.dto.Class.IngresoporActividadDTO;
+import com.kontagro.reports.contracts.IReportGenerator;
 import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ByteArrayResource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +25,7 @@ import java.util.List;
 public class IngresoController {
 
     private final IIngresoService ingresoService;
+    private final IReportGenerator<IngresoporActividadDTO> reportGenerator;
 
     @PostMapping
     public ResponseEntity<IngresoDTO> crearIngreso(@RequestBody IngresoDTO ingresoDTO) {
@@ -39,10 +48,10 @@ public class IngresoController {
     }
 
     @GetMapping("/consultarFechas")
-    public ResponseEntity<List<IngresoDTO>> consultarIngresosPorFechas(@RequestParam LocalDate fechaInicial,
+    public ResponseEntity<List<IngresoporActividadDTO>> consultarIngresosPorFechas(@RequestParam LocalDate fechaInicial,
                                                         @RequestParam LocalDate fechaFinal)
                                                         throws BadRequestException {
-        List<IngresoDTO> respuesta =
+        List<IngresoporActividadDTO> respuesta =
                 ingresoService.consultarIngresoPorFecha(fechaInicial, fechaFinal);
 
         return ResponseEntity.ok(respuesta);
@@ -52,6 +61,22 @@ public class IngresoController {
     public ResponseEntity <Void>  eliminarIngreso(@RequestParam Integer id){
         ingresoService.eliminarIngreso(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/reporteExcel")
+    public ResponseEntity<Resource> exportarExcel(@RequestParam LocalDate fechaInicial,
+                                                                                   @RequestParam LocalDate fechaFinal)
+                                                                                    throws BadRequestException {
+        List<IngresoporActividadDTO> lista =
+                ingresoService.consultarIngresoPorFecha(fechaInicial, fechaFinal);
+        byte[] archivo = reportGenerator.generateExcel(lista);
+        ByteArrayResource recurso = new ByteArrayResource(archivo);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ingresos_" + fechaInicial + "_al_" + fechaFinal + ".xlsx")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .contentLength(archivo.length)
+                .body(recurso);
     }
 }
 
