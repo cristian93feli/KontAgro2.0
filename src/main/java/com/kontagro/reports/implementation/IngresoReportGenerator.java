@@ -3,6 +3,8 @@ package com.kontagro.reports.implementation;
 import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.dto.Class.IngresoporActividadDTO;
 import com.kontagro.reports.contracts.IReportGenerator;
+import com.kontagro.utils.Enum;
+import com.kontagro.utils.MensajesError;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,7 +21,7 @@ public class IngresoReportGenerator implements IReportGenerator<IngresoporActivi
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            Sheet sheet = workbook.createSheet("Ingresos");
+            Sheet sheet = workbook.createSheet(Enum.INGRESOS);
 
             // 1. Crear estilo para el encabezado (Negrita y fondo gris claro)
             CellStyle headerStyle = workbook.createCellStyle();
@@ -30,7 +32,7 @@ public class IngresoReportGenerator implements IReportGenerator<IngresoporActivi
             headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             // 2. Crear fila de encabezados
-            String[] columnas = {"ID Ingreso", "Actividad", "Fecha", "Valor"};
+            String[] columnas = {Enum.ID_INGRESO, Enum.ACTIVIDAD, Enum.FECHA, Enum.VALOR};
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < columnas.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -65,7 +67,7 @@ public class IngresoReportGenerator implements IReportGenerator<IngresoporActivi
 
         // Celda de etiqueta
             Cell labelCell = totalRow.createCell(2); // La ponemos debajo de "Fecha"
-            labelCell.setCellValue("TOTAL GENERAL:");
+            labelCell.setCellValue(Enum.TOTAL_GENERAL);
             labelCell.setCellStyle(totalStyle);
 
         // Celda con la suma
@@ -80,7 +82,7 @@ public class IngresoReportGenerator implements IReportGenerator<IngresoporActivi
             workbook.write(out);
             return out.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException("Error al generar Excel", e);
+            throw new RuntimeException((MensajesError.ErrorExcel), e);
         }
     }
 
