@@ -23,9 +23,9 @@ public class ActividadService implements IActividadService {
 
     @Override
     public ActividadDTO crearActividad(ActividadDTO actividadDTO) {
-        if (actividadRepository.existsById(actividadDTO.getIdActividad())) {
-            throw new BadRequestException(String.format(MensajesError.ACTIVIDAD_YA_EXISTE, actividadDTO.getIdActividad()));
-        }
+        //if (actividadRepository.existsById(actividadDTO.getIdActividad())) {
+          //  throw new BadRequestException(String.format(MensajesError.ACTIVIDAD_YA_EXISTE, actividadDTO.getIdActividad()));
+        //}
 
         Actividad entidad = actividadDTOConverter.convertToEntity(actividadDTO);
         Actividad guardada = actividadRepository.save(entidad);
