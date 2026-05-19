@@ -16,4 +16,9 @@ public class MensajesError {
     public static final String USUARIO_NO_ENCONTRADO = "El usuario con ID %d no fue encontrado.";
     public static final String USUARIO_NO_EXISTE = "El usuario ingresado no existe.";
     public static final String ErrorExcel = "Error al generar el archivo de Excel.";
+    public static final String LIQUIDACION_NO_EXISTE = "la liquidacion ingresada no existe";
+    public static final String LIQUIDACION_ID_NO_EXISTE = "La Liquidación con ID %d no encontrada";
+    public static final String TAREA_REALIZADA_ID_NO_EXISTE =  "La tarea realizada con ID %d no fue encontrada.";
+    public static final String TRABAJADOR_NO_ENCONTRADA = "El Trabajador con ID %d no existe";
+    public static final String TRABAJADOR_NO_EXISTE =  "El trabajador no existe";
 }

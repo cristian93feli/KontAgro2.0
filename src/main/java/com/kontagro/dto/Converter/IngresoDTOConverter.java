@@ -16,10 +16,12 @@ public class IngresoDTOConverter {
     private final ModelMapper modelMapper;
 
     public IngresoDTO convertToDTO(Ingreso ingreso) {
+
         return modelMapper.map(ingreso, IngresoDTO.class);
     }
 
     public Ingreso convertToEntity(IngresoDTO ingresoDTO) {
+
         return modelMapper.map(ingresoDTO, Ingreso.class);
     }
 

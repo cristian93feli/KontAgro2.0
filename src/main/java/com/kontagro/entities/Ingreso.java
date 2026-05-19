@@ -18,13 +18,13 @@ public class Ingreso {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_actividad", referencedColumnName = "id_actividad")
+    @JoinColumn(name = "id_actividad", nullable = false, referencedColumnName = "id_actividad")
     private Actividad actividad;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Column(name = "valor")
+    @Column(name = "valor", nullable = false)
     private BigDecimal valor;
 
 }
