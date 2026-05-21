@@ -11,12 +11,14 @@ import com.kontagro.service.contracts.IIngresoService;
 import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +55,11 @@ public class IngresoService implements IIngresoService {
     }
 
     @Override
-    public List<IngresoDTO> consultarIngreso() {
-        List<IngresoDTO> ingresoLista = ingresoDTOConverter.convertToDTOList(iIngresoRepository.findAll());
+    public Page<IngresoDTO> consultarIngreso(Pageable pageable) {
 
-            return ingresoLista;
+        return iIngresoRepository
+                .findAll(pageable)
+                .map(ingresoDTOConverter::convertToDTO);
 
     }
 

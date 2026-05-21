@@ -4,6 +4,8 @@ import com.kontagro.dto.Class.EgresoDTO;
 import com.kontagro.service.contracts.IEgresoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,8 @@ public class EgresoController {
     }
 
     @GetMapping("/egresos")
-    public ResponseEntity<List<EgresoDTO>> consultarEgreso() {
-        return new ResponseEntity<>(egresoService.consultarEgreso(), HttpStatus.OK);
+    public ResponseEntity<Page<EgresoDTO>> consultarEgreso(Pageable pageable) {
+        return new ResponseEntity<>(egresoService.consultarEgreso(pageable), HttpStatus.OK);
 
     }
 

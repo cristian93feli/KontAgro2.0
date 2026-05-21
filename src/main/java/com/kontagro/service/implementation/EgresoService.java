@@ -1,6 +1,7 @@
 package com.kontagro.service.implementation;
 
 import com.kontagro.dto.Class.EgresoDTO;
+import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.dto.Converter.EgresoDTOConverter;
 import com.kontagro.entities.Egreso;
 import com.kontagro.exceptions.ResourceNotFoundException;
@@ -9,6 +10,8 @@ import com.kontagro.service.contracts.IEgresoService;
 import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,11 +54,11 @@ public class EgresoService implements IEgresoService {
         }
 
     @Override
-    public List <EgresoDTO> consultarEgreso() {
-        List<EgresoDTO> listaEegresos = egresoDTOConverter.convertToDTOList(iEgresoRepository.findAll());
+        public Page<EgresoDTO> consultarEgreso(Pageable pageable) {
 
-        return listaEegresos;
-
+            return iEgresoRepository
+                    .findAll(pageable)
+                    .map(egresoDTOConverter::convertToDTO);
     }
 
     @Override

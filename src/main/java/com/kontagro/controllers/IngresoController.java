@@ -7,14 +7,14 @@ import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ByteArrayResource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,8 +38,11 @@ public class IngresoController {
     }
 
     @GetMapping("/ingresos")
-    public ResponseEntity<List<IngresoDTO>> consultarIngreso() {
-        return new ResponseEntity<>(ingresoService.consultarIngreso(), HttpStatus.OK);
+    public ResponseEntity<Page<IngresoDTO>> consultarIngreso(Pageable pageable) {
+
+        return ResponseEntity.ok(
+                ingresoService.consultarIngreso(pageable)
+        );
     }
 
     @PutMapping
