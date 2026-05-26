@@ -78,4 +78,16 @@ public class ActividadService implements IActividadService {
         }
         actividadRepository.deleteById(id);
     }
+
+    @Override
+    public List<ActividadDTO> listarActividadesPorActividadEconomica(Integer idActividadEconomica) {
+
+        List<Actividad> actividades = actividadRepository.findByActividadEconomicaId(idActividadEconomica);
+
+        if (actividades.isEmpty()) {
+            throw new ResourceNotFoundException(MensajesError.NO_EXISTE_REGISTROS);
+        }
+
+        return actividadDTOConverter.convertToDTOList(actividades);
+    }
 }

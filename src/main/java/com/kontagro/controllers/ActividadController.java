@@ -41,4 +41,10 @@ public class ActividadController {
         actividadService.eliminarActividad(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/actividadEconomica")
+    public ResponseEntity<List<ActividadDTO>> listarPorActividadEconomica(@RequestParam Integer idActividadEconomica) {
+        List<ActividadDTO> actividades = actividadService.listarActividadesPorActividadEconomica(idActividadEconomica);
+        return ResponseEntity.ok(actividades);
+    }
 }

@@ -15,4 +15,6 @@ public interface IActividadService {
     List<ActividadDTO> consultarActividad();
 
     void eliminarActividad(Integer id);
+
+    List<ActividadDTO> listarActividadesPorActividadEconomica(Integer idActividadEconomica);
 }

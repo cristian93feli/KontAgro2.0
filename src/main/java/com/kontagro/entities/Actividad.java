@@ -20,4 +20,8 @@ public class Actividad {
     @Column(name = "nombre_actividad", nullable = false)
     private String nombreActividad;
 
+    @ManyToOne
+    @JoinColumn(name = "id_actividad_economica", nullable = false)
+    private ActividadEconomica actividadEconomica;
+
 }

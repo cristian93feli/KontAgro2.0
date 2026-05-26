@@ -9,4 +9,6 @@ public class ActividadDTO implements Serializable {
 
     private Integer idActividad;
     private String nombreActividad;
+
+    private Integer idActividadEconomica;
 }

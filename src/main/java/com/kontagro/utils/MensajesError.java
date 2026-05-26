@@ -21,4 +21,6 @@ public class MensajesError {
     public static final String TAREA_REALIZADA_ID_NO_EXISTE =  "La tarea realizada con ID %d no fue encontrada.";
     public static final String TRABAJADOR_NO_ENCONTRADA = "El Trabajador con ID %d no existe";
     public static final String TRABAJADOR_NO_EXISTE =  "El trabajador no existe";
+    public static final String ACTIVIDAD_ECONOMICA_NO_ENCONTRADA = "la actividad economica con ID %d no existe";
+    public static final String ACTIVIDAD_ECONOMICA_NO_EXISTE =  "la actividad economica  no existe";
 }
