@@ -13,5 +13,9 @@ public interface IUsuarioService {
 
     AuthResponseDTO login(String usuario, String contraseña);
 
+    AuthResponseDTO refrescarSesion(String refreshToken);
+
+    void cerrarSesion(String refreshToken);
+
     void eliminarUsuario(Long id);
 }

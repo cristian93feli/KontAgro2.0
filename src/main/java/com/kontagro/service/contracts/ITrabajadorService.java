@@ -1,6 +1,7 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.TrabajadorDTO;
+
 import java.util.List;
 
 public interface ITrabajadorService {
@@ -8,4 +9,5 @@ public interface ITrabajadorService {
     TrabajadorDTO consultarTrabajador(Integer id);
     TrabajadorDTO actualizarTrabajador(TrabajadorDTO dto);
     List<TrabajadorDTO> listarTrabajadores();
+    void eliminarTrabajador(Integer id);
 }

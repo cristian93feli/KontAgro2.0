@@ -5,6 +5,7 @@ import com.kontagro.dto.Class.UsuarioDTO;
 import com.kontagro.dto.Converter.UsuarioDTOConverter;
 import com.kontagro.entities.Usuario;
 import com.kontagro.exceptions.ResourceNotFoundException;
+import com.kontagro.exceptions.UnauthorizedException;
 import com.kontagro.repository.IUsuarioRepository;
 import com.kontagro.security.AuthService;
 import com.kontagro.service.contracts.IUsuarioService;
@@ -12,6 +13,7 @@ import com.kontagro.utils.MensajesError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -35,18 +37,39 @@ public class UsuarioService implements IUsuarioService {
 
     public AuthResponseDTO login(String usuario, String contrasena) {
         Usuario usuarioEntity = iUsuarioRepository.findByUsuario(usuario)
-                .orElseThrow(() -> new ResourceNotFoundException(MensajesError.USUARIO_ERRADO));
+                .orElseThrow(() -> new UnauthorizedException(MensajesError.USUARIO_ERRADO));
 
         if (!passwordEncoder.matches(contrasena, usuarioEntity.getContrasena())) {
-            throw new ResourceNotFoundException(MensajesError.USUARIO_ERRADO);
+            throw new UnauthorizedException(MensajesError.USUARIO_ERRADO);
         }
 
-        String token = authService.generateToken(usuarioEntity);
+        long expiresAt = System.currentTimeMillis() + authService.getAccessTokenExpirationMillis();
+        String token = authService.generateToken(usuarioEntity, expiresAt);
+        String refreshToken = authService.createRefreshToken(usuarioEntity);
         UsuarioDTO usuarioDTO = usuarioDTOConverter.convertToDTO(usuarioEntity);
 
-        return new AuthResponseDTO(token, usuarioDTO);
+        return new AuthResponseDTO(token, usuarioDTO, expiresAt, refreshToken);
     }
 
+
+
+    @Override
+    @Transactional
+    public AuthResponseDTO refrescarSesion(String refreshToken) {
+        Usuario usuario = authService.validateAndTouchRefreshToken(refreshToken);
+        long expiresAt = System.currentTimeMillis() + authService.getAccessTokenExpirationMillis();
+        return new AuthResponseDTO(
+                authService.generateToken(usuario, expiresAt),
+                usuarioDTOConverter.convertToDTO(usuario),
+                expiresAt,
+                refreshToken
+        );
+    }
+
+    @Override
+    public void cerrarSesion(String refreshToken) {
+        authService.revokeRefreshToken(refreshToken);
+    }
 
     @Override
     public UsuarioDTO consultarUsuario(Long id) {

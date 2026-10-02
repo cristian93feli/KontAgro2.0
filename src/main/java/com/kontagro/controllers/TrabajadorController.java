@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class TrabajadorController {
         return new ResponseEntity<>(trabajadorService.crearTrabajador(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<TrabajadorDTO> consultarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(trabajadorService.consultarTrabajador(id));
     }
@@ -34,5 +35,11 @@ public class TrabajadorController {
     @GetMapping
     public ResponseEntity<List<TrabajadorDTO>> listarTodos() {
         return ResponseEntity.ok(trabajadorService.listarTrabajadores());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        trabajadorService.eliminarTrabajador(id);
+        return ResponseEntity.noContent().build();
     }
 }
