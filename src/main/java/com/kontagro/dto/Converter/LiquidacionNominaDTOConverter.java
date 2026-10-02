@@ -2,39 +2,31 @@ package com.kontagro.dto.Converter;
 
 import com.kontagro.dto.LiquidacionNominaDTO;
 import com.kontagro.entities.LiquidacionNomina;
-import com.kontagro.entities.Trabajador;
-import com.kontagro.entities.Trabajador;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import com.kontagro.entities.enums.EstadoLiquidacion;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class LiquidacionNominaDTOConverter {
 
-    private final ModelMapper modelMapper;
-
-    public LiquidacionNominaDTO convertToDTO(LiquidacionNomina liquidacionNomina) {
-        LiquidacionNominaDTO dto = modelMapper.map(liquidacionNomina, LiquidacionNominaDTO.class);
-        if (liquidacionNomina.getTrabajador() != null) {
-            dto.setIdTrabajador(liquidacionNomina.getTrabajador().getId()); // Asumiendo que el ID del trabajador en su entidad es 'id'
-        }
+    public LiquidacionNominaDTO convertToDTO(LiquidacionNomina entidad) {
+        LiquidacionNominaDTO dto = new LiquidacionNominaDTO();
+        dto.setId(entidad.getId());
+        dto.setIdTrabajador(entidad.getTrabajador() != null ? entidad.getTrabajador().getId() : null);
+        dto.setFechaInicialPagado(entidad.getFechaInicialPagado());
+        dto.setFechaFinalPagado(entidad.getFechaFinalPagado());
+        dto.setValorTotalTrabajado(entidad.getValorTotalTrabajado());
+        dto.setValorTotalDescuentos(entidad.getValorTotalDescuentos());
+        dto.setValorTotalPagado(entidad.getValorTotalPagado());
+        dto.setFechaLiquidacion(entidad.getFechaLiquidacion());
+        dto.setFechaAnulacion(entidad.getFechaAnulacion());
+        dto.setEstado(entidad.getEstado() == null ? EstadoLiquidacion.ACTIVA : entidad.getEstado());
         return dto;
     }
 
-    public LiquidacionNomina convertToEntity(LiquidacionNominaDTO dto) {
-        LiquidacionNomina entidad = modelMapper.map(dto, LiquidacionNomina.class);
-        if (dto.getIdTrabajador() != null) {
-            Trabajador trabajador = new Trabajador();
-            trabajador.setId(dto.getIdTrabajador()); // Asigna el ID recibido al objeto relacional
-            entidad.setTrabajador(trabajador);
-        }
-        return entidad;
-    }
-
-    public List<LiquidacionNominaDTO> convertToDTOList(List<LiquidacionNomina> liquidaciones) {
-        return liquidaciones.stream()
+    public List<LiquidacionNominaDTO> convertToDTOList(List<LiquidacionNomina> lista) {
+        return lista.stream()
                 .map(this::convertToDTO)
                 .toList();
     }

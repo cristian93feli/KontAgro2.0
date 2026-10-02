@@ -1,6 +1,7 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.RegistrarPagoTrabajadorDTO;
+
 import java.util.List;
 
 public interface IRegistrarPagoTrabajadorService {
@@ -8,4 +9,6 @@ public interface IRegistrarPagoTrabajadorService {
     RegistrarPagoTrabajadorDTO consultarPagoTrabajador(Integer id);
     RegistrarPagoTrabajadorDTO actualizarPagoTrabajador(RegistrarPagoTrabajadorDTO dto);
     List<RegistrarPagoTrabajadorDTO> listarPagosTrabajadores();
+    List<RegistrarPagoTrabajadorDTO> listarPagosPendientesPorTrabajador(Integer idTrabajador);
+    void eliminarPagoTrabajador(Integer id);
 }
