@@ -8,10 +8,9 @@ import java.time.LocalDate;
 
 @Data
 public class EgresoDTO implements Serializable {
-
     private Integer id;
     private LocalDate fecha;
     private BigDecimal valor;
-    private Integer idActividad; // solo el ID de la actividad
-
+    private Integer idActividad;
+    private String nombreActividad;
 }

@@ -1,6 +1,5 @@
 package com.kontagro.reports.implementation;
 
-import com.kontagro.dto.Class.IngresoDTO;
 import com.kontagro.dto.Class.IngresoporActividadDTO;
 import com.kontagro.reports.contracts.IReportGenerator;
 import com.kontagro.utils.Enum;

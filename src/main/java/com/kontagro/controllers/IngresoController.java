@@ -5,7 +5,6 @@ import com.kontagro.dto.Class.IngresoporActividadDTO;
 import com.kontagro.reports.contracts.IReportGenerator;
 import com.kontagro.service.contracts.IIngresoService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,8 +51,7 @@ public class IngresoController {
 
     @GetMapping("/consultarFechas")
     public ResponseEntity<List<IngresoporActividadDTO>> consultarIngresosPorFechas(@RequestParam LocalDate fechaInicial,
-                                                        @RequestParam LocalDate fechaFinal)
-                                                        throws BadRequestException {
+                                                        @RequestParam LocalDate fechaFinal) {
         List<IngresoporActividadDTO> respuesta =
                 ingresoService.consultarIngresoPorFecha(fechaInicial, fechaFinal);
 
@@ -68,8 +66,7 @@ public class IngresoController {
 
     @GetMapping("/reporteExcel")
     public ResponseEntity<Resource> exportarExcel(@RequestParam LocalDate fechaInicial,
-                                                                                   @RequestParam LocalDate fechaFinal)
-                                                                                    throws BadRequestException {
+                                                                                   @RequestParam LocalDate fechaFinal) {
         List<IngresoporActividadDTO> lista =
                 ingresoService.consultarIngresoPorFecha(fechaInicial, fechaFinal);
         byte[] archivo = reportGenerator.generateExcel(lista);

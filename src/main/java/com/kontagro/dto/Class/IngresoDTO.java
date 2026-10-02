@@ -12,5 +12,5 @@ public class IngresoDTO implements Serializable {
     private LocalDate fecha;
     private BigDecimal valor;
     private Integer idActividad;
-
+    private String nombreActividad;
 }

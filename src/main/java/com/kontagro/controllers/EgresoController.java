@@ -3,7 +3,6 @@ package com.kontagro.controllers;
 import com.kontagro.dto.Class.EgresoDTO;
 import com.kontagro.service.contracts.IEgresoService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -45,7 +44,7 @@ public class EgresoController {
     @GetMapping("/consultarFechas")
     public ResponseEntity<List<EgresoDTO>> consultarEgresoPorFecha(
             @RequestParam LocalDate fecha_inicial,
-            @RequestParam LocalDate fecha_final) throws BadRequestException {
+            @RequestParam LocalDate fecha_final) {
 
         List<EgresoDTO> respuesta =
                 egresoService.consultarEgresoPorFecha(fecha_inicial, fecha_final);

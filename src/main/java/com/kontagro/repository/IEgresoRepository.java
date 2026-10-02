@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IEgresoRepository extends JpaRepository<Egreso, Integer> {
-
-    List<Egreso> findByFechaBetween(LocalDate fecha_inicial, LocalDate fecha_final);
+    boolean existsByActividad_IdActividad(Integer idActividad);
+    List<Egreso> findByFechaBetween(LocalDate fechaInicial, LocalDate fechaFinal);
+    List<Egreso> findByFechaBetweenOrderByFechaAsc(LocalDate fechaInicial, LocalDate fechaFinal);
 }

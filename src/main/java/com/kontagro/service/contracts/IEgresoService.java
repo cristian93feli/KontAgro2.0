@@ -1,11 +1,8 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.Class.EgresoDTO;
-import com.kontagro.dto.Class.IngresoDTO;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,9 +17,7 @@ public interface IEgresoService {
 
     Page<EgresoDTO> consultarEgreso(Pageable pageable);
 
-    List<EgresoDTO> consultarEgresoPorFecha(
-            @RequestParam LocalDate fecha_inicial,
-            @RequestParam LocalDate fecha_final) throws BadRequestException;
+    List<EgresoDTO> consultarEgresoPorFecha(LocalDate fechaInicial, LocalDate fechaFinal);
 
     void eliminarEgreso(Integer id);
 }
