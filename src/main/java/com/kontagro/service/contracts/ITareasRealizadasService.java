@@ -1,6 +1,7 @@
 package com.kontagro.service.contracts;
 
 import com.kontagro.dto.TareasRealizadasDTO;
+
 import java.util.List;
 
 public interface ITareasRealizadasService {
@@ -8,4 +9,7 @@ public interface ITareasRealizadasService {
     TareasRealizadasDTO consultarTareaRealizada(Integer id);
     TareasRealizadasDTO actualizarTareaRealizada(TareasRealizadasDTO dto);
     List<TareasRealizadasDTO> listarTareasRealizadas();
+    List<TareasRealizadasDTO> listarTareasActivas();
+    TareasRealizadasDTO cambiarEstado(Integer id, boolean activo);
+    void eliminarTareaRealizada(Integer id);
 }

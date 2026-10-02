@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class ActividadEconomicaController {
         return new ResponseEntity<>(service.crearActividadEconomica(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<ActividadEconomicaDTO> consultarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(service.consultarActividadEconomica(id));
     }
@@ -33,5 +34,10 @@ public class ActividadEconomicaController {
     @GetMapping
     public ResponseEntity<List<ActividadEconomicaDTO>> listarTodas() {
         return ResponseEntity.ok(service.listarActividadesEconomicas());
+    }
+
+    @GetMapping("/financieras")
+    public ResponseEntity<List<ActividadEconomicaDTO>> listarClasificacionesFinancieras() {
+        return ResponseEntity.ok(service.listarClasificacionesFinancieras());
     }
 }

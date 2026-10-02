@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Entity
 @NoArgsConstructor
@@ -17,12 +15,12 @@ public class TareasRealizadas {
     @Column(name = "id_tarea_realizada")
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_actividad", referencedColumnName = "id_actividad", nullable = false)
-    private Actividad actividad;
+    @Column(name = "nombre", nullable = false, length = 120)
+    private String nombre;
 
-    @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    @Column(name = "descripcion", length = 255)
+    private String descripcion;
 
-
+    @Column(name = "activo", nullable = false)
+    private boolean activo = true;
 }

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Data
 @Entity
 @NoArgsConstructor
@@ -16,12 +14,11 @@ public class Actividad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_actividad")
     private Integer idActividad;
-    
+
     @Column(name = "nombre_actividad", nullable = false)
     private String nombreActividad;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_actividad_economica", nullable = false)
     private ActividadEconomica actividadEconomica;
-
 }

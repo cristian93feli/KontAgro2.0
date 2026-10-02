@@ -1,6 +1,5 @@
 package com.kontagro.service.contracts;
 
-
 import com.kontagro.dto.Class.ActividadEconomicaDTO;
 
 import java.util.List;
@@ -10,4 +9,5 @@ public interface IActividadEconomicaService {
     ActividadEconomicaDTO consultarActividadEconomica(Integer id);
     ActividadEconomicaDTO actualizarActividadEconomica(ActividadEconomicaDTO dto);
     List<ActividadEconomicaDTO> listarActividadesEconomicas();
+    List<ActividadEconomicaDTO> listarClasificacionesFinancieras();
 }
